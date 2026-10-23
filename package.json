@@ -1,0 +1,19 @@
+{
+  "name": "afterglow",
+  "private": true,
+  "version": "0.1.0",
+  "description": "残响 AFTERGLOW — 第三人称科幻探索动作游戏垂直切片 (Three.js + Vite)",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "node --test tests/logic.test.mjs"
+  },
+  "dependencies": {
+    "three": "^0.170.0"
+  },
+  "devDependencies": {
+    "vite": "^6.0.0"
+  }
+}

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>残响 AFTERGLOW — 烛龙站打捞行动</title>
+  <link rel="stylesheet" href="./src/style.css" />
+</head>
+<body>
+  <div id="app">
+    <canvas id="game-canvas"></canvas>
+    <div id="ui-root"></div>
+  </div>
+  <script>
+    window.__bootErrors = [];
+    window.addEventListener('error', (e) => window.__bootErrors.push('ERR: ' + e.message + ' @ ' + (e.filename || '') + ':' + e.lineno));
+    window.addEventListener('unhandledrejection', (e) => window.__bootErrors.push('REJ: ' + String(e.reason && e.reason.stack || e.reason)));
+  </script>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
