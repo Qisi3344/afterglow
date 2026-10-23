@@ -252,11 +252,29 @@ export class Game {
     if (this.input.mouseDown && this.fireCd <= 0) {
       this.fireCd = 0.22;
       const origin = this.player.muzzleWorldPos();
-      // 射向准星方向：从相机穿过屏幕中心
+      // 射线定靶：从相机中心沿视线求最近命中（敌人或墙体），弹道精确飞向命中点，
+      // 保证"准星指哪打哪"，抵消枪口与相机的位置差。
       const dir = new THREE.Vector3();
       this.camera.getWorldDirection(dir);
-      // 枪口对齐视线：从枪口沿视线方向前方的点
-      const target = this.camera.position.clone().addScaledVector(dir, 30);
+      const ray = new THREE.Ray(this.camera.position.clone(), dir);
+      let bestT = 30;
+      for (const e of this.enemies.list) {
+        if (e.dead) continue;
+        const toC = e.center.clone().sub(this.camera.position);
+        const t = toC.dot(dir);
+        if (t > 0.5 && t < bestT) {
+          const closest = this.camera.position.clone().addScaledVector(dir, t);
+          if (closest.distanceTo(e.center) < 1.0) bestT = t;
+        }
+      }
+      for (const b of this.world.collision.boxes) {
+        const hit = ray.intersectBox(b, new THREE.Vector3());
+        if (hit) {
+          const t = hit.distanceTo(this.camera.position);
+          if (t < bestT) bestT = t;
+        }
+      }
+      const target = this.camera.position.clone().addScaledVector(dir, bestT);
       const shootDir = target.sub(origin).normalize();
       this.projectiles.spawnPlayerBolt(origin, shootDir);
       this.audio.shoot();
